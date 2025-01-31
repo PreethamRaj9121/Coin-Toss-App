@@ -1,0 +1,19 @@
+trigger:
+- main  # Run pipeline on commits to 'main' branch
+
+pool:
+  vmImage: ubuntu-latest  # Use the latest Ubuntu image
+
+steps:
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'  # The root folder of your project
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/html.zip'  # Output ZIP file
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)/html.zip'  # Publish the ZIP file
+    artifactName: 'drop'  # Name of the artifact to be used in the release pipeline
